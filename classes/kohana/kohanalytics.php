@@ -108,7 +108,7 @@ abstract class Kohana_Kohanalytics
 		// Work out the size for the container needed to hold the results, else we get results missed!
         $months = floor((strtotime($end_date) - strtotime($start_date)) / Date::MONTH) + 2;
 
-		$results = $this->_gapi->requestReportData($this->_config['report_id'], array('month'), $metrics, array('-month'), NULL, $start_date, $end_date, 1, $months);
+		$results = $this->_gapi->requestReportData($this->_config['report_id'], array('month', 'year'), array('visits'), array('-year','-month'), NULL, $start_date, $end_date, 1, $months);
 
 		$visits = array();
         foreach ($results as $r)
