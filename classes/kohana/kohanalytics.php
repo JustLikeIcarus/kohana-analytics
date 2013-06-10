@@ -20,7 +20,7 @@ abstract class Kohana_Kohanalytics
 			// Create a new session instance
 			Kohanalytics::$_instance = new Kohanalytics($config);
 		}
-	
+
 		return Kohanalytics::$_instance;
 	}
 
@@ -36,20 +36,20 @@ abstract class Kohana_Kohanalytics
 	{
 		// Save the config in the object
 		$this->_config = $config;
-		
+
 		// Load the GAPI http://code.google.com/p/gapi-google-analytics-php-interface/ library
 		require Kohana::find_file('vendor', 'GAPI/gapi.class');
-		
+
 		$this->_gapi = new gapi($this->_config['username'], $this->_config['password']);
-		
+
 		// Set the default start and end dates. Maybe take this into config?
-		$this->start_date = date('Y-m-d', strtotime('1 month ago'));
-		$this->end_date   = date('Y-m-d');
+		$this->start_date = date('Y-m-d', strtotime('29 days ago'));
+		$this->end_date   = date('Y-m-d', strtotime('1 day ago'));
 	}
 
     /**
      * Statistics per day
-     * 
+     *
      * @param string $start_date
      * @param string $end_date
      * @param mixed $metrics
@@ -87,7 +87,7 @@ abstract class Kohana_Kohanalytics
 
     /**
      * Statistica per month
-     * 
+     *
      * @param string $start_date
      * @param string $end_date
      * @param mixed $metrics
@@ -99,7 +99,7 @@ abstract class Kohana_Kohanalytics
 		{
 			$start_date = date('Y-m-d', strtotime('first day of 6 months ago'));
 		}
-		
+
 		if ( ! $end_date)
 		{
 			$end_date = date('Y-m-d', strtotime('last day of last month'));
@@ -123,7 +123,7 @@ abstract class Kohana_Kohanalytics
 
     /**
      * Custom statistics
-     * 
+     *
      * @param mixed $dimension
      * @param mixed $metrics
      * @param mixed $sort
