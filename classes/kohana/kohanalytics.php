@@ -3,6 +3,34 @@
 abstract class Kohana_Kohanalytics
 {
     /**
+     * Kohanalytics Config
+     *
+     * @var Kohana_Config_Group
+     */
+    protected $_config;
+
+    /**
+     * GAPI - Google Analytics PHP Interface
+     *
+     * @var gapi
+     */
+    protected $_gapi;
+
+    /**
+     * Start Date
+     *
+     * @var string
+     */
+    protected $start_date;
+
+    /**
+     * End Date
+     *
+     * @var string
+     */
+    protected $end_date;
+
+    /**
      * Kohanalytics instance
      *
      * @var Kohanalytics
@@ -29,26 +57,17 @@ abstract class Kohana_Kohanalytics
     }
 
     /**
-     * Kohanalytics Config
-     *
-     * @var Kohana_Config_Group
-     */
-    protected $_config;
-
-    /**
-     * GAPI - Google Analytics PHP Interface
-     *
-     * @var gapi
-     */
-    protected $_gapi;
-
-    /**
      * Loads configuration options.
      *
      * @return  void
      */
     public function __construct($config = array())
     {
+        if ($config['username'] == 'YOUR GOOGLE USERNAME')
+        {
+            return FALSE;
+        }
+
         // Save the config in the object
         $this->_config = $config;
 
@@ -59,7 +78,7 @@ abstract class Kohana_Kohanalytics
 
         // Set the default start and end dates. Maybe take this into config?
         $this->start_date = date('Y-m-d', strtotime('1 month ago'));
-        $this->end_date   = date('Y-m-d', strtotime('1 day ago'));
+        $this->end_date   = date('Y-m-d');
     }
 
     /**
@@ -72,15 +91,8 @@ abstract class Kohana_Kohanalytics
      */
     public function daily_visit_count($start_date = FALSE, $end_date = FALSE, $metrics = array('pageviews', 'visits'))
     {
-        if ( ! $start_date)
-        {
-            $start_date = date('Y-m-d', strtotime('1 month ago'));
-        }
-
-        if ( ! $end_date)
-        {
-            $end_date = date('Y-m-d');
-        }
+        ! $start_date && $start_date = $this->start_date;
+        ! $end_date   && $end_date   = $this->end_date;
 
         // Work out the size for the container needed to hold the results, else we get results missed!
         $days = floor((strtotime($end_date) - strtotime($start_date)) / Date::DAY) + 2;
@@ -110,15 +122,8 @@ abstract class Kohana_Kohanalytics
      */
     public function monthly_visit_count($start_date = FALSE, $end_date = FALSE, $metrics = array('pageviews', 'visits'))
     {
-        if ( ! $start_date)
-        {
-            $start_date = date('Y-m-d', strtotime('first day of 6 months ago'));
-        }
-
-        if ( ! $end_date)
-        {
-            $end_date = date('Y-m-d', strtotime('last day of last month'));
-        }
+        ! $start_date && $start_date = date('Y-m-d', strtotime('first day of 6 months ago'));
+        ! $end_date   && $end_date   = date('Y-m-d', strtotime('last day of last month'));
 
         // Work out the size for the container needed to hold the results, else we get results missed!
         $months = floor((strtotime($end_date) - strtotime($start_date)) / Date::MONTH) + 2;
